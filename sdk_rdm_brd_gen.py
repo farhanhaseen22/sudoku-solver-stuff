@@ -35,12 +35,13 @@ def text(message,x,y,size):
 
 #A function to check the number of 0's in the grid
 def checkNumberOfZeros(grid):
-  count = 0
+  countZero = 0
   for row in range(0,9):
       for col in range(0,9):
         if grid[row][col]==0:
-          count+=1
-  return count
+          countZero+=1
+  
+  return countZero
 
 #A function to check if the grid is full
 def checkGrid(grid):
@@ -125,7 +126,7 @@ def solveGrid(grid):
                 if solveGrid(grid):
                   return True
       break
-  grid[row][col]=0  
+  grid[row][col]=0
 
 numberList=[1,2,3,4,5,6,7,8,9]
 #shuffle(numberList)
@@ -175,7 +176,7 @@ def fillGrid(grid):
                 if fillGrid(grid):
                   return True
       break
-  grid[row][col]=0             
+  grid[row][col]=0
 
 
 #Generate a Fully Solved Grid
@@ -194,44 +195,46 @@ attempts = 3
 attempt_times = 0
 counter = 1
 while attempts>0:
-  #Select a random cell that is not already empty
-  row = randint(0,8)
-  col = randint(0,8)
-  while grid[row][col]==0:
+    #Select a random cell that is not already empty
     row = randint(0,8)
     col = randint(0,8)
-  #Remember its cell value in case we need to put it back  
-  backup = grid[row][col]
-  grid[row][col] = 0
-  
-  #Take a full copy of the grid
-  copyGrid = []
-  for r in range(0,9):
-     copyGrid.append([])
-     for c in range(0,9):
-        copyGrid[r].append(grid[r][c])
+    while grid[row][col]==0:
+      row = randint(0,8)
+      col = randint(0,8)
+    #Remember its cell value in case we need to put it back  
+    backup = grid[row][col]
+    grid[row][col] = 0
+    
+    #Take a full copy of the grid
+    copyGrid = []
+    for r in range(0,9):
+      copyGrid.append([])
+      for c in range(0,9):
+          copyGrid[r].append(grid[r][c])
 
-  print(f"Attempt Number: {attempts}")
+    print(f"Attempt Number: {attempts}")
 
-  #Count the number of solutions that this grid has (using a backtracking approach implemented in the solveGrid() function)
-  counter = 0
-  solveGrid(copyGrid)
-  #If the number of solution is different from 1 then we need to cancel the change by putting the value we took away back in the grid
-  if counter!=1:
-    grid[row][col]=backup
-    #We could stop here, but we can also have another attempt with a different cell just to try to remove more numbers
-    attempts -= 1
-  
-  print(f"Number of solutions: {counter}")
-  attempt_times+=1
-  
-  myPen.clear()
-  drawGrid(grid) 
-  myPen.getscreen().update()
+    #Count the number of solutions that this grid has (using a backtracking approach implemented in the solveGrid() function)
+    counter = 0
+    solveGrid(copyGrid)
+    #If the number of solution is different from 1 then we need to cancel the change by putting the value we took away back in the grid
+    if counter!=1:
+      grid[row][col]=backup
+      #We could stop here, but we can also have another attempt with a different cell just to try to remove more numbers
+      attempts -= 1
+    
+    print(f"Number of solutions: {counter}")
+    attempt_times+=1
+    
+    myPen.clear()
+    drawGrid(grid) 
+    myPen.getscreen().update()
 
+
+cnoz = checkNumberOfZeros(grid)
 print("============================")
 print(f"attempt_times Number: {attempt_times}")
-print(f"the number of 0's: {checkNumberOfZeros}")
+print(f"The Number of 0's: {cnoz}")
 print("Sudoku Grid Ready")
 
 
