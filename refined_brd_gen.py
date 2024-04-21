@@ -9,6 +9,16 @@ for turn in range(0,9):
 soln_counter = 0
 numbers_list = [1,2,3,4,5,6,7,8,9]
 
+#A function to check the number of 0's in the grid
+def checkNumberOfZeros(grid):
+  countZero = 0
+  for row in range(0,9):
+      for col in range(0,9):
+        if grid[row][col]==0:
+          countZero+=1
+  
+  return countZero
+
 #A function to check if the grid is full
 def checkGrid(grid):
     for row in range(0,9):
@@ -110,7 +120,6 @@ def solveGrid(grid):
                             if checkGrid(grid):
                                 soln_counter+=1
                                 break
-                                # return True
                             else:
                                 if solveGrid(grid):
                                     return True
@@ -139,13 +148,45 @@ if __name__ == "__main__":
     print(f"\nSolution Counter: {soln_counter}\n")
     
     # ==========================================
-    # solveGrid(grid)
-    # print("After solveGrid:")
-    # printGrid(grid)
-    # print(f"\nSolution Counter: {soln_counter}\n")
+    limit = 55
+    attempts = 0
+    soln_counter = 1
+    cnoz = 0
+    
+    # while attempts<limit or soln_counter<=0:
+    while cnoz<limit:
+        #Select a random cell that is not already empty
+        row = randint(0,8)
+        col = randint(0,8)
+        while grid[row][col]==0:
+            row = randint(0,8)
+            col = randint(0,8)
+        #Remember its cell value in case we need to put it back
+        backup = grid[row][col]
+        grid[row][col] = 0
+        
+        copyGrid = []
+        for r in range(0,9):
+            copyGrid.append([])
+            for c in range(0,9):
+                copyGrid[r].append(grid[r][c])
+
+        soln_counter = 0
+        solveGrid(copyGrid)
+        
+        if (soln_counter<=0 or soln_counter>1):
+            grid[row][col]=backup
+        
+        attempts+=1
+        cnoz = checkNumberOfZeros(grid)
+        print(f"The Number of attempts so far: {attempts}")
+    
+    # ==========================================
+    print("After all the Removing:")
+    printGrid(grid)
+    print(f"\nSolution Counter: {soln_counter}\n")
     
     # solveGrid(grid)
     # print("After solveGrid:")
     # printGrid(grid)
     # print(f"\nSolution Counter: {soln_counter}\n")
-    

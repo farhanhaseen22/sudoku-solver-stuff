@@ -4,6 +4,7 @@ def func1(given_num):
         return True
     # if given_num%5==0:
     #     return False
+    #     return True
 
 if __name__ == "__main__":
     for i in range(0,10):

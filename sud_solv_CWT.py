@@ -1,6 +1,6 @@
 
 # This is the sudoku solver made by Coding with Tim(CWT).
-# Tho it has a fixed board and it solves it only 1 time.
+# However, it has a fixed board and it solves it only 1 time.
 
 board = [
     [7,8,0,4,0,0,1,2,0],
@@ -60,6 +60,7 @@ def valid(given_board, num, pos):
 def print_board(given_board):
     for i in range(len(given_board)):
         if i % 3 == 0 and i != 0:
+            print("- - - - - - - - - - - - - ")
             print("- - - - - - - - - - - - - ")
 
         for j in range(len(given_board[0])):
