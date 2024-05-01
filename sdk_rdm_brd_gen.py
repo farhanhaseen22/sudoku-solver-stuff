@@ -218,6 +218,9 @@ while attempts>0:
     counter = 0
     solveGrid(copyGrid)
     #If the number of solution is different from 1 then we need to cancel the change by putting the value we took away back in the grid
+    
+    
+    # if (soln_counter<=0 or soln_counter>1):
     if counter!=1:
       grid[row][col]=backup
       #We could stop here, but we can also have another attempt with a different cell just to try to remove more numbers

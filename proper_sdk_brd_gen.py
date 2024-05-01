@@ -1,7 +1,7 @@
 
 from random import randint, shuffle
 
-#Initialize an empty (9x9) grid
+# Initialize an empty (9x9) grid
 grid = []
 for turn in range(0,9):
     grid.append([0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -9,7 +9,7 @@ for turn in range(0,9):
 soln_counter = 0
 numbers_list = [1,2,3,4,5,6,7,8,9]
 
-#A function to check the number of 0's in the grid
+# A function to check the number of 0's in the grid
 def checkNumberOfZeros(grid):
   countZero = 0
   for row in range(0,9):
@@ -19,7 +19,7 @@ def checkNumberOfZeros(grid):
   
   return countZero
 
-#A function to check if the grid is full
+# A function to check if the grid is full
 def checkGrid(grid):
     for row in range(0,9):
         for col in range(0,9):
@@ -76,8 +76,7 @@ def fillGrid(grid):
             break
     grid[row][col]=0
 
-# Backtracking or Recursive function to check
-# all possible combinations of numbers
+# Backtracking or Recursive function to check all possible combinations of numbers
 # until a solution is found
 def solveGrid(grid):
     global soln_counter
@@ -126,69 +125,48 @@ def solveGrid(grid):
             break
     grid[row][col]=0
 
-def printGrid(grid):
-    for i in range(9):
-        for j in range(9):
-            if j<6 and j%3 == 2:
-                print(grid[i][j], end=" | ")
-            else:
-                print(grid[i][j], end=" ")
-        print()
-        if i<6 and i%3 == 2:
-            print("=====================")
 
-
-if __name__ == "__main__":
-    
-    # print(len(grid))
+def board_generate(limit):
     
     fillGrid(grid)
-    print("After fillGrid:")
-    printGrid(grid)
-    print(f"\nSolution Counter: {soln_counter}\n")
     
-    # ==========================================
     # this variable is regarded as the difficulty meter
-    limit = 48
-    #############
+    limit = limit
+    # ==========================================
     attempts = 0
     soln_counter = 1
     cnoz = 0
     
-    # while attempts<limit or soln_counter<=0:
-    while cnoz<limit:
-        #Select a random cell that is not already empty
-        row = randint(0,8)
-        col = randint(0,8)
-        while grid[row][col]==0:
-            row = randint(0,8)
-            col = randint(0,8)
-        #Remember its cell value in case we need to put it back
-        backup = grid[row][col]
-        grid[row][col] = 0
+    # while cnoz<limit:
+    #     #Select a random cell that is not already empty
+    #     row = randint(0,8)
+    #     col = randint(0,8)
+    #     while grid[row][col]==0:
+    #         row = randint(0,8)
+    #         col = randint(0,8)
+    #     #Remember its cell value in case we need to put it back
+    #     backup = grid[row][col]
+    #     grid[row][col] = 0
         
-        copyGrid = []
-        for r in range(0,9):
-            copyGrid.append([])
-            for c in range(0,9):
-                copyGrid[r].append(grid[r][c])
+    #     copyGrid = []
+    #     for r in range(0,9):
+    #         copyGrid.append([])
+    #         for c in range(0,9):
+    #             copyGrid[r].append(grid[r][c])
 
-        soln_counter = 0
-        solveGrid(copyGrid)
+    #     soln_counter = 0
+    #     solveGrid(copyGrid)
         
-        if soln_counter != 1:
-            grid[row][col]=backup
+    #     if soln_counter != 1:
+    #         grid[row][col]=backup
         
-        attempts+=1
-        cnoz = checkNumberOfZeros(grid)
-        print(f"The Number of attempts so far: {attempts}")
+    #     attempts+=1
+    #     cnoz = checkNumberOfZeros(grid)
+    #     print(f"The Number of attempts so far: {attempts}")
     
-    # ==========================================
-    print("After all the Removing:")
-    printGrid(grid)
-    print(f"\nSolution Counter: {soln_counter}\n")
+    # # ==========================================
+    # print("After all the Removing:")
+    # return grid
+    # # ==========================================
     
-    # solveGrid(grid)
-    # print("After solveGrid:")
-    # printGrid(grid)
-    # print(f"\nSolution Counter: {soln_counter}\n")
+    return type(cnoz)
