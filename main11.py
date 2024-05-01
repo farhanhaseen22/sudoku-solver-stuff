@@ -4,6 +4,7 @@ import proper_sdk_brd_gen as pbrd
 
 grid = pbrd.board_generate(45)
 print(grid)
+print(grid)
 
 # for i in range(9):
 #         for j in range(9):
