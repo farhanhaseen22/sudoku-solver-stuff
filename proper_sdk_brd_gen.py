@@ -1,172 +1,127 @@
-
 from random import randint, shuffle
 
-# Initialize an empty (9x9) grid
-grid = []
-for turn in range(0,9):
-    grid.append([0, 0, 0, 0, 0, 0, 0, 0, 0])
+class SudokuGenerator:
+    def __init__(self):
+        pass
 
-soln_counter = 0
-numbers_list = [1,2,3,4,5,6,7,8,9]
+    def generate_board(self, limit):
+        grid = self.__initialize_grid()
+        self.__fill_grid(grid)
+        self.__remove_cells(grid, limit)
+        return grid
 
-# A function to check the number of 0's in the grid
-def checkNumberOfZeros(grid):
-  countZero = 0
-  for row in range(0,9):
-      for col in range(0,9):
-        if grid[row][col]==0:
-          countZero+=1
-  
-  return countZero
+    def __initialize_grid(self):
+        grid = []
+        for _ in range(0, 9):
+            grid.append([0] * 9)
+        return grid
 
-# A function to check if the grid is full
-def checkGrid(grid):
-    for row in range(0,9):
-        for col in range(0,9):
-            if grid[row][col]==0:
-                return False
-    #We have a complete grid
-    return True 
+    def __check_number_of_zeros(self, grid):
+        count_zero = 0
+        for row in range(0, 9):
+            for col in range(0, 9):
+                if grid[row][col] == 0:
+                    count_zero += 1
+        return count_zero
 
-# Backtracking/recursive function to check all possible combinations of numbers
-# until a solution is found and to also fill up the grid.
-def fillGrid(grid):
-    #Find next empty cell
-    for i in range(0,81):
-        row=i//9
-        col=i%9
-        if grid[row][col]==0:
-            shuffle(numbers_list)
-            for value in numbers_list:
-                #Check that this value has not already been used on this row
-                if not(value in grid[row]):
-                    #Check that this value has not already been used on this column
-                    if not value in (grid[0][col],grid[1][col],grid[2][col],grid[3][col],grid[4][col],grid[5][col],grid[6][col],grid[7][col],grid[8][col]):
-                        #Identify which of the 9 squares we are working on
-                        square=[]
-                        if row<3:
-                            if col<3:
-                                square=[grid[i][0:3] for i in range(0,3)]
-                            elif col<6:
-                                square=[grid[i][3:6] for i in range(0,3)]
-                            else:  
-                                square=[grid[i][6:9] for i in range(0,3)]
-                        elif row<6:
-                            if col<3:
-                                square=[grid[i][0:3] for i in range(3,6)]
-                            elif col<6:
-                                square=[grid[i][3:6] for i in range(3,6)]
-                            else:  
-                                square=[grid[i][6:9] for i in range(3,6)]
-                        else:
-                            if col<3:
-                                square=[grid[i][0:3] for i in range(6,9)]
-                            elif col<6:
-                                square=[grid[i][3:6] for i in range(6,9)]
-                            else:  
-                                square=[grid[i][6:9] for i in range(6,9)]
-                        #Check that this value has not already be used on this 3x3 square
-                        if not value in (square[0] + square[1] + square[2]):
-                            grid[row][col]=value
-                            if checkGrid(grid):
+    def __check_grid(self, grid):
+        for row in range(0, 9):
+            for col in range(0, 9):
+                if grid[row][col] == 0:
+                    return False
+        return True
+
+    def __fill_grid(self, grid):
+        for _ in range(0, 81):
+            row = _ // 9
+            col = _ % 9
+            if grid[row][col] == 0:
+                shuffle(self.numbers_list)
+                for value in self.numbers_list:
+                    if value not in grid[row] and value not in (grid[0][col], grid[1][col], grid[2][col], grid[3][col],
+                                                                 grid[4][col], grid[5][col], grid[6][col], grid[7][col], grid[8][col]):
+                        square = self.__get_square(grid, row, col)
+                        if value not in (square[0] + square[1] + square[2]):
+                            grid[row][col] = value
+                            if self.__check_grid(grid):
                                 return True
                             else:
-                                if fillGrid(grid):
+                                if self.__fill_grid(grid):
                                     return True
-            break
-    grid[row][col]=0
+                break
+        grid[row][col] = 0
 
-# Backtracking or Recursive function to check all possible combinations of numbers
-# until a solution is found
-def solveGrid(grid):
-    global soln_counter
-    #Find next empty cell
-    for i in range(0,81):
-        row=i//9
-        col=i%9
-        if grid[row][col]==0:
-            for value in range (1,10):
-                #Check that this value has not already be used on this row
-                if not(value in grid[row]):
-                    #Check that this value has not already be used on this column
-                    if not value in (grid[0][col],grid[1][col],grid[2][col],grid[3][col],grid[4][col],grid[5][col],grid[6][col],grid[7][col],grid[8][col]):
-                        #Identify which of the 9 squares we are working on
-                        square=[]
-                        if row<3:
-                            if col<3:
-                                square=[grid[i][0:3] for i in range(0,3)]
-                            elif col<6:
-                                square=[grid[i][3:6] for i in range(0,3)]
-                            else:  
-                                square=[grid[i][6:9] for i in range(0,3)]
-                        elif row<6:
-                            if col<3:
-                                square=[grid[i][0:3] for i in range(3,6)]
-                            elif col<6:
-                                square=[grid[i][3:6] for i in range(3,6)]
-                            else:  
-                                square=[grid[i][6:9] for i in range(3,6)]
-                        else:
-                            if col<3:
-                                square=[grid[i][0:3] for i in range(6,9)]
-                            elif col<6:
-                                square=[grid[i][3:6] for i in range(6,9)]
-                            else:  
-                                square=[grid[i][6:9] for i in range(6,9)]
-                        #Check that this value has not already be used on this 3x3 square
-                        if not value in (square[0] + square[1] + square[2]):
-                            grid[row][col]=value
-                            if checkGrid(grid):
-                                soln_counter+=1
+    def __get_square(self, grid, row, col):
+        square = []
+        if row < 3:
+            if col < 3:
+                square = [grid[i][0:3] for i in range(0, 3)]
+            elif col < 6:
+                square = [grid[i][3:6] for i in range(0, 3)]
+            else:
+                square = [grid[i][6:9] for i in range(0, 3)]
+        elif row < 6:
+            if col < 3:
+                square = [grid[i][0:3] for i in range(3, 6)]
+            elif col < 6:
+                square = [grid[i][3:6] for i in range(3, 6)]
+            else:
+                square = [grid[i][6:9] for i in range(3, 6)]
+        else:
+            if col < 3:
+                square = [grid[i][0:3] for i in range(6, 9)]
+            elif col < 6:
+                square = [grid[i][3:6] for i in range(6, 9)]
+            else:
+                square = [grid[i][6:9] for i in range(6, 9)]
+        return square
+
+    def __solve_grid(self, grid):
+        for _ in range(0, 81):
+            row = _ // 9
+            col = _ % 9
+            if grid[row][col] == 0:
+                for value in range(1, 10):
+                    if value not in grid[row] and value not in (grid[0][col], grid[1][col], grid[2][col], grid[3][col],
+                                                                 grid[4][col], grid[5][col], grid[6][col], grid[7][col], grid[8][col]):
+                        square = self.__get_square(grid, row, col)
+                        if value not in (square[0] + square[1] + square[2]):
+                            grid[row][col] = value
+                            if self.__check_grid(grid):
+                                self.soln_counter += 1
                                 break
                             else:
-                                if solveGrid(grid):
+                                if self.__solve_grid(grid):
                                     return True
-            break
-    grid[row][col]=0
+                break
+        grid[row][col] = 0
+
+    def __remove_cells(self, grid, limit):
+        attempts = 0
+        cnoz = 0
+        while cnoz < limit:
+            row = randint(0, 8)
+            col = randint(0, 8)
+            while grid[row][col] == 0:
+                row = randint(0, 8)
+                col = randint(0, 8)
+            backup = grid[row][col]
+            grid[row][col] = 0
+            copy_grid = [row[:] for row in grid]
+            self.soln_counter = 0
+            self.__solve_grid(copy_grid)
+            if self.soln_counter != 1:
+                grid[row][col] = backup
+            attempts += 1
+            cnoz = self.__check_number_of_zeros(grid)
+            print(f"The Number of attempts so far: {attempts}")
+        print("After all the Removing:")
 
 
-def board_generate(limit):
-    
-    fillGrid(grid)
-    
-    # this variable is regarded as the difficulty meter
-    limit = limit
-    # ==========================================
-    attempts = 0
-    soln_counter = 1
-    cnoz = 0
-    
-    # while cnoz<limit:
-    #     #Select a random cell that is not already empty
-    #     row = randint(0,8)
-    #     col = randint(0,8)
-    #     while grid[row][col]==0:
-    #         row = randint(0,8)
-    #         col = randint(0,8)
-    #     #Remember its cell value in case we need to put it back
-    #     backup = grid[row][col]
-    #     grid[row][col] = 0
-        
-    #     copyGrid = []
-    #     for r in range(0,9):
-    #         copyGrid.append([])
-    #         for c in range(0,9):
-    #             copyGrid[r].append(grid[r][c])
+# Example usage:
+if __name__ == "__main__":
+    sudoku_gen = SudokuGenerator()
+    board = sudoku_gen.generate_board(60)
+    for row in board:
+        print(row)
 
-    #     soln_counter = 0
-    #     solveGrid(copyGrid)
-        
-    #     if soln_counter != 1:
-    #         grid[row][col]=backup
-        
-    #     attempts+=1
-    #     cnoz = checkNumberOfZeros(grid)
-    #     print(f"The Number of attempts so far: {attempts}")
-    
-    # # ==========================================
-    # print("After all the Removing:")
-    # return grid
-    # # ==========================================
-    
-    return type(cnoz)
